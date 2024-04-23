@@ -27,6 +27,7 @@ from passlib.context import CryptContext
 from fastapi.staticfiles import StaticFiles
 from fastapi.routing import APIRoute
 from pydantic import BaseModel, ValidationError
+
 import yaml
 import secrets
 
@@ -60,6 +61,7 @@ app = FastAPI(
 )
 
 security = HTTPBasic()
+
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -414,7 +416,6 @@ def read_current_user(
 class FakeBabyClass():
     name: str
     price: float
-    tags: List[str] = field(default_factory=list)
     description: Union[str, None] = None
     tax: Union[int, None] = None
 
