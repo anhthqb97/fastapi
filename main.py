@@ -7,7 +7,8 @@ from fastapi import (
     FastAPI,
     BackgroundTasks,
     Request,
-    HTTPException
+    HTTPException,
+    WebSocket
 )
 from typing import (
     Annotated,
@@ -40,7 +41,7 @@ from datetime import datetime, timedelta, timezone
 
 from dependencies import get_query_token, get_token_header
 from internal import admin
-from routers import items, users
+from routers import items, users, sockets
 
 tags_metadata = [
     {
@@ -55,10 +56,14 @@ tags_metadata = [
             "url": "https://fastapi.tiangolo.com/",
         },
     },
+    {
+        "name": "sockets",
+        "description": "Operations with sockets. The **socket** logic is also here.",
+    },
 ]
 app = FastAPI(
     openapi_tags=tags_metadata,
-    dependencies=[Depends(get_query_token)]
+    # dependencies=[Depends(get_query_token)]
 )
 
 security = HTTPBasic()
@@ -68,6 +73,7 @@ security = HTTPBasic()
 
 app.include_router(users.router)
 app.include_router(items.router)
+app.include_router(sockets.router)
 app.include_router(
     admin.router,
     prefix="/admin",
