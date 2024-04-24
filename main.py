@@ -25,6 +25,7 @@ from fastapi.security import (
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from fastapi.routing import APIRoute
 from pydantic import BaseModel, ValidationError
 
@@ -424,3 +425,20 @@ class FakeBabyClass():
 )
 async def create_item(item: FakeBabyClass):
     return item
+
+
+### TEMPLATES
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates/")
+
+@app.get("/templates/{id}", response_class=HTMLResponse)
+async def read_templates(request: Request, id: str):
+    return templates.TemplateResponse(
+        request=request,
+        name="item.html",
+        context={
+            "id": id,
+            "value": "HERE"
+        }
+    )
